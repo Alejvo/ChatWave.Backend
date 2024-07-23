@@ -14,7 +14,7 @@ namespace Application.Users.Create
         {
             RuleFor(x => x.Email)
                 .EmailAddress()
-                .Must(email => repository.IsEmailUnique(email))
+                .MustAsync((email,cancellationToken) =>repository.IsEmailUnique(email))
                 .WithMessage("email already exists.")
                 .NotEmpty();
             RuleFor(x => x.FirstName)
@@ -26,7 +26,7 @@ namespace Application.Users.Create
                 .LessThan(DateTime.Now)
                 .NotEmpty();
             RuleFor(x => x.UserName)
-                .Must(username => repository.IsUserNameUnique(username))
+                .MustAsync((username,CancellationToken) => repository.IsUserNameUnique(username))
                 .WithMessage("Username already exists.");
             RuleFor(x => x.Password)
                 .NotEmpty();

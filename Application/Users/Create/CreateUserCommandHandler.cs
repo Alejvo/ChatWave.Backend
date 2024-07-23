@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
+using Domain.Utilities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace Application.Users.Create
 {
     public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     {
-        private readonly IRepository<User> _repository;
+        private readonly IUserRepository _repository;
 
-        public CreateUserCommandHandler(IRepository<User> repository)
+        public CreateUserCommandHandler(IUserRepository repository)
         {
             _repository = repository;
         }
@@ -31,7 +32,7 @@ namespace Application.Users.Create
                 Birthday = request.Birthday
                 
             };
-            await _repository.CreateAsync(user);
+            await _repository.CreateAsync(UserProcedures.CreateUser,user);
         }
     }
 }

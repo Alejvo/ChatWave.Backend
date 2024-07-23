@@ -20,13 +20,14 @@ namespace Application.Behaviors
         public async Task<Tresponse> Handle(TRequest request, RequestHandlerDelegate<Tresponse> next, CancellationToken cancellationToken)
         {
             var context = new ValidationContext<TRequest>(request);
-            var failures = _validators.Select(v=>v.Validate(context))
-                .SelectMany(result=>result.Errors)
-                .Where(f=>f!=null)
-                .ToList();
+            var validationTasks = _validators.Select(v => v.ValidateAsync(context));
+            var validationResults = await Task.WhenAll(validationTasks);
+            var failures = validationResults.SelectMany(result => result.Errors)
+                                            .Where(f => f != null)
+                                            .ToList();
             if (failures.Any())
             {
-                var errorMessages = string.Join("; ",failures.Select(f=>f.ErrorMessage));
+                var errorMessages = string.Join("; ", failures.Select(f => f.ErrorMessage));
                 throw new ValidationException(errorMessages);
             }
             return await next();
