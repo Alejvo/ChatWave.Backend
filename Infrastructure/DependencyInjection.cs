@@ -30,6 +30,8 @@ namespace Infrastructure
                 typeof(Repository<>));
 
             services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<ITokenRepository,TokenRepository>();
+            services.AddScoped<IGroupRepository,GroupRepository>();
             return services;
         }
     }

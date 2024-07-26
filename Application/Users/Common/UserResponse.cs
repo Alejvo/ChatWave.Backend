@@ -16,6 +16,7 @@ namespace Application.Users.Common
     {
         public static UserResponse ToUserResponse(User user)
         {
+            if (user == null) return null;
             return new UserResponse
             (
                $"{user.FirstName} {user.LastName}",

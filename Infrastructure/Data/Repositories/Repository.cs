@@ -32,14 +32,23 @@ namespace Infrastructure.Data.Repositories
 
         public async Task DeleteAsync(string storedProcedure, object param)
         {
-            using var connection = _sqlConnection.CreateConnection();
-            await connection.ExecuteAsync(
-                storedProcedure,
-                param,
-                commandType: CommandType.StoredProcedure);
+            try
+            {
+                using var connection = _sqlConnection.CreateConnection();
+                await connection.ExecuteAsync(
+                    storedProcedure,
+                    param,
+                    commandType: CommandType.StoredProcedure
+                ).ConfigureAwait(false); // Configura el await para no capturar el contexto de sincronización.
+            }
+            catch (Exception ex)
+            {
+                // Log o maneja la excepción según sea necesario
+                throw new ApplicationException($"Error ejecutando el procedimiento almacenado {storedProcedure}", ex);
+            }
         }
 
-        public async Task<IEnumerable<T>> GetAll(string storedProcedure)
+        public virtual async Task<IEnumerable<T>> GetAll(string storedProcedure)
         {
             using var connection = _sqlConnection.CreateConnection();
             return await connection.QueryAsync<T>(
@@ -47,7 +56,7 @@ namespace Infrastructure.Data.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<T?> GetById(string storedProcedure,object param)
+        public virtual async Task<T?> GetById(string storedProcedure,object param)
         {
             using var connection = _sqlConnection.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<T>(

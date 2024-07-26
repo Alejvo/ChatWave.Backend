@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Token
+    public class TokenRequest
     {
-        public string Code { get; set; }
+        public string Token { get; set; }
         public string RefreshToken { get; set; }
-        public DateOnly ExpiryTime { get; set; }
-        public string UserId { get; set; }
-
     }
 }
