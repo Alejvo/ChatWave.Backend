@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ITokenRepository
+    public interface ITokenRepository:IRepository<Token>
     {
-        Task<bool> IsRefreshTokenValid(string refreshToken);
-        Task SaveToken(string userId,string refreshToken);
+        Task<Token?> GetToken(string token);
+        Task SaveToken(Token token);
     }
 }

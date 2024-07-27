@@ -12,6 +12,5 @@ namespace Domain.Interfaces
         string GenerateToken(string userId);
         string GenerateRefreshToken();
         Task SaveRefreshToken(string userId, string refreshToken);
-        Task<bool> ValidateRefreshToken(string userId, string refreshToken);
     }
 }

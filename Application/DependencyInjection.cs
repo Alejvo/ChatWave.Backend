@@ -25,7 +25,7 @@ namespace Application
                 typeof(IPipelineBehavior<,>),
                 typeof(ValidationBehavior<,>));
 
-            //services.AddScoped<IAuthService,AuthService>();
+            services.AddScoped<IAuthService,AuthService>();
 
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
             return services;

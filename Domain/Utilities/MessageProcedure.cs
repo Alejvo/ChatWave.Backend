@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Utilities
 {
-    public static class TokenProcedures
+    public static class MessageProcedure
     {
-        public const string GetToken = "GetToken";
         public const string SaveToken = "SaveToken";
+        public const string GetRefreshToken = "GetRefreshToken";
     }
 }
