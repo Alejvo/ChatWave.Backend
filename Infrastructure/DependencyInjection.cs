@@ -32,6 +32,7 @@ namespace Infrastructure
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<ITokenRepository,TokenRepository>();
             services.AddScoped<IGroupRepository,GroupRepository>();
+            services.AddScoped<IMessageRepository,MessageRepository>();
             return services;
         }
     }

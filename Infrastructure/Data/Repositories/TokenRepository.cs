@@ -12,10 +12,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class TokenRepository :Repository<Token>,ITokenRepository
+    public class TokenRepository :ITokenRepository
     {
-        public TokenRepository(SqlConnectionFactory sqlConnection) : base(sqlConnection)
+        private readonly SqlConnectionFactory _sqlConnection;
+
+        public TokenRepository(SqlConnectionFactory sqlConnection)
         {
+            _sqlConnection = sqlConnection;
         }
 
         public async Task<Token?> GetToken(string token)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ITokenRepository:IRepository<Token>
+    public interface ITokenRepository
     {
         Task<Token?> GetToken(string token);
         Task SaveToken(Token token);

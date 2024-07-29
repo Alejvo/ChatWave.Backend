@@ -49,7 +49,7 @@ namespace Application.Services
                 {
                     new Claim(ClaimTypes.Name, userId)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes),SecurityAlgorithms.HmacSha256Signature)
             };
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -67,7 +67,7 @@ namespace Application.Services
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserId = user.Id,
-                    ExpiryTime = DateTime.UtcNow.AddMinutes(1),
+                    ExpiryTime = DateTime.UtcNow.AddMinutes(15),
                     JwtToken = refreshToken
                 };
                 await _tokenRepository.SaveToken(token);

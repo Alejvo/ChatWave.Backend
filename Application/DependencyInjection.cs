@@ -20,7 +20,7 @@ namespace Application
             {
                 config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
             });
-
+            
             services.AddScoped(
                 typeof(IPipelineBehavior<,>),
                 typeof(ValidationBehavior<,>));
