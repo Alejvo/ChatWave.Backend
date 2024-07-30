@@ -5,21 +5,28 @@ using Application.Users.Get.All;
 using Application.Users.GetBy.Id;
 using Application.Users.GetBy.Username;
 using Application.Users.Update;
+using Domain.Interfaces;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IAuthService _authService;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, IAuthService authService, IUserRepository userRepository)
         {
             _mediator = mediator;
+            _authService = authService;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -46,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
+        [Route("register")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             await _mediator.Send(command);
@@ -54,7 +61,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("Update")]
+        [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
             await _mediator.Send(command);
@@ -63,11 +70,27 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
+        [Route("delete/{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
             await _mediator.Send(new DeleteUserCommand(id));
             return Ok("Deleted");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var user = await _userRepository.LoginUser(request.Email,request.Password);
+            if(user != null)
+            {
+                var token = _authService.GenerateToken(user.Id);
+                var refreshToken = _authService.GenerateRefreshToken();
+                await _authService.SaveRefreshToken("6e283f95-1579-4e92-94c1-0dd386cbea74", refreshToken);
+                return Ok(new { token, refreshToken });
+            }
+            return BadRequest();
+
+        }
+
     }
 }

@@ -19,12 +19,12 @@ namespace Infrastructure.Data.Repositories
         {
         }
 
-        public async Task<User?> GetByUserName(string storedProcedure,object param)
+        public async Task<User?> GetByUserName(string username)
         {
             using var connection = _sqlConnection.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<User>(
-                storedProcedure,
-                param,
+                UserProcedures.GetUserByUsername,
+                new {username},
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -42,6 +42,15 @@ namespace Infrastructure.Data.Repositories
             return true;
         }
 
-
+        public async Task<User> LoginUser(string email, string password)
+        {
+            using var connection = _sqlConnection.CreateConnection();
+            var user = await connection.QuerySingleOrDefaultAsync<User>(
+                UserProcedures.LoginUser,
+                new { email,password},
+                commandType: CommandType.StoredProcedure);
+            if (user != null) return user;
+            return default;
+        }
     }
 }

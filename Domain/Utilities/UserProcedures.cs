@@ -14,5 +14,6 @@ namespace Domain.Utilities
         public const string CreateUser = "CreateUser";
         public const string UpdateUser = "UpdateUser";
         public const string DeleteUser = "DeleteUser";
+        public const string LoginUser = "LoginUser";
     }
 }

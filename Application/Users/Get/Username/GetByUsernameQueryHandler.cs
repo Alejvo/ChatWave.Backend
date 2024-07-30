@@ -21,7 +21,7 @@ namespace Application.Users.GetBy.Username
 
         public async Task<UserResponse> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
         {
-            var user = await _repository.GetByUserName(UserProcedures.GetUserByUsername,new { request.Username });
+            var user = await _repository.GetByUserName(request.Username);
             if(user == null)
             {
                 return default;
