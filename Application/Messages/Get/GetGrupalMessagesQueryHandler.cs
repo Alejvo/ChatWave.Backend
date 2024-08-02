@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Messages.Get
 {
-    public class GetGrupalMessagesQueryHandler : IRequestHandler<GetGrupalMessagesQuery, IEnumerable<MessageResponse>>
+    public class GetGrupalMessagesQueryHandler : IRequestHandler<GetGrupalMessagesQuery, ErrorOr<IReadOnlyList<MessageResponse>>>
     {
         private readonly IMessageRepository _repository;
 
@@ -18,10 +19,11 @@ namespace Application.Messages.Get
             _repository = repository;
         }
 
-        public async Task<IEnumerable<MessageResponse>> Handle(GetGrupalMessagesQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<IReadOnlyList<MessageResponse>>> Handle(GetGrupalMessagesQuery request, CancellationToken cancellationToken)
         {
             var grupalMessage = await _repository.GetGroupMessages(request.GroupId);
-            return grupalMessage;
+            var response = grupalMessage.ToList();
+            return response;
         }
     }
 }

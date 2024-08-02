@@ -1,4 +1,5 @@
 ﻿using Application.Users.Common;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace Application.Users.GetBy.Id
 {
-    public record GetByIdQuery(string Id):IRequest<UserResponse>;
+    public record GetByIdQuery(string Id):IRequest<ErrorOr<UserResponse>>;
 
 }

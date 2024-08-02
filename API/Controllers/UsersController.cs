@@ -15,8 +15,7 @@ using System.Reflection;
 namespace API.Controllers
 {
     [Route("api/users")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : ApiController
     {
         private readonly IMediator _mediator;
         private readonly IAuthService _authService;
@@ -30,42 +29,52 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
             var users = await _mediator.Send(new GetAllUsersQuery());
-            return Ok(users);
+            return users.Match(
+                result=>Ok(result),
+                errors=>Problem(errors));
         }
 
         [HttpGet]
         [Route("id/{id}")]
-        public async Task<ActionResult<UserResponse>> GetUserById([FromRoute] string id)
+        public async Task<IActionResult> GetUserById([FromRoute] string id)
         {
             var user = await _mediator.Send(new GetByIdQuery(id));
-            return Ok(user);
+            return user.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpGet]
         [Route("username/{username}")]
-        public async Task<ActionResult<UserResponse>> GetUserByUsername([FromRoute] string username)
+        public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
         {
             var user = await _mediator.Send(new GetByUsernameQuery(username));
-            return Ok(user);
+            return user.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
-            await _mediator.Send(command);
-            return Created();
+            var createdUser =await _mediator.Send(command);
+            return createdUser.Match(
+                x=>Ok(x),
+                errors=>Problem(errors));
         }
 
         [HttpPut]
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
-            await _mediator.Send(command);
-            return Ok("Updated");
+            var updatedUser = await _mediator.Send(command);
+            return updatedUser.Match(
+                result=>NoContent(),
+                errors=>Problem(errors));
 
         }
 
@@ -73,8 +82,10 @@ namespace API.Controllers
         [Route("delete/{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
-            await _mediator.Send(new DeleteUserCommand(id));
-            return Ok("Deleted");
+            var deletedUser = await _mediator.Send(new DeleteUserCommand(id));
+            return deletedUser.Match(
+                result=>NoContent(),
+                errors=>Problem(errors));
         }
 
         [HttpPost]

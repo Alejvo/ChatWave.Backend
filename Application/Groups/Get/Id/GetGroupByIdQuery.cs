@@ -1,4 +1,5 @@
 ﻿using Application.Groups.Common;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Get.Id
 {
-    public record GetGroupByIdQuery(string Id):IRequest<GroupResponse>;
+    public record GetGroupByIdQuery(string Id):IRequest<ErrorOr<GroupResponse>>;
 }

@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Create
 {
-    public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
+    public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand,ErrorOr<Unit>>
     {
         private readonly IUserRepository _repository;
 
@@ -19,7 +20,7 @@ namespace Application.Users.Create
             _repository = repository;
         }
 
-        public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = new User 
             { 
@@ -33,6 +34,7 @@ namespace Application.Users.Create
                 
             };
             await _repository.CreateAsync(UserProcedures.CreateUser,user);
+            return Unit.Value;
         }
     }
 }

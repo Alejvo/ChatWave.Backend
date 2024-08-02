@@ -1,4 +1,5 @@
 ﻿using Application.Groups.Common;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Get.All
 {
-    public record GetGroupsQuery():IRequest<IEnumerable<GroupResponse>>;
+    public record GetGroupsQuery():IRequest<ErrorOr<IReadOnlyList<GroupResponse>>>;
 }

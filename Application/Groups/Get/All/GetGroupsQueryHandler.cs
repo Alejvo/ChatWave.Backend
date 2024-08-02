@@ -2,6 +2,7 @@
 using Application.Users.Common;
 using Domain.Interfaces;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Get.All
 {
-    public class GetGroupsQueryHandler : IRequestHandler<GetGroupsQuery,IEnumerable<GroupResponse>>
+    public class GetGroupsQueryHandler : IRequestHandler<GetGroupsQuery,ErrorOr<IReadOnlyList<GroupResponse>>>
     {
         private readonly IGroupRepository _repository;
 
@@ -21,13 +22,14 @@ namespace Application.Groups.Get.All
             _repository = repository;
         }
 
-        public async Task<IEnumerable<GroupResponse>> Handle(GetGroupsQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<IReadOnlyList<GroupResponse>>> Handle(GetGroupsQuery request, CancellationToken cancellationToken)
         {
             var groups =await _repository.GetAll(GroupProcedures.GetGroups);
-            return groups.Select(group =>
+            var groupsResponse = groups.Select(group =>
 
                 GroupResponse.ToGroupResponse(group)
-            );
+            ).ToList();
+            return groupsResponse;
         }
     }
 }

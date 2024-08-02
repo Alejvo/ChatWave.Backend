@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Create
 {
-    public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand>
+    public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand,ErrorOr<Unit>>
     {
         private readonly IGroupRepository _repository;
 
@@ -19,7 +20,7 @@ namespace Application.Groups.Create
             _repository = repository;
         }
 
-        public async Task Handle(CreateGroupCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
             var group = new
             {
@@ -29,6 +30,7 @@ namespace Application.Groups.Create
             };
 
             await _repository.CreateAsync(GroupProcedures.CreateGroup,group);
+            return Unit.Value;
         }
     }
 }

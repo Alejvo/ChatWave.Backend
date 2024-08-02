@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Users.Delete
+namespace Application.Groups.Users.Add
 {
-    public record DeleteUserCommand(string Id):IRequest<ErrorOr<Unit>>;
+    public record AddUserToGroupCommand(string groupId, string userId) : IRequest<ErrorOr<Unit>>;
 }

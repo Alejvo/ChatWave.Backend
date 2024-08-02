@@ -1,3 +1,4 @@
+using API.Middlewares;
 using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddApplication()
     .AddInfrastructure();
+builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
 var key = builder.Configuration.GetValue<string>("JwtSettings:Key");
 var keyBytes = Encoding.ASCII.GetBytes(key!);
@@ -46,9 +48,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//app.UseErrorHandlingMiddleware();
 
 app.UseHttpsRedirection();
-
+app.UseErrorHandlingMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 

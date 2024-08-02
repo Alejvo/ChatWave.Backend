@@ -1,6 +1,7 @@
 ﻿using Application.Users.Common;
 using Domain.Interfaces;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.GetBy.Username
 {
-    public class GetByUsernameQueryHandler : IRequestHandler<GetByUsernameQuery, UserResponse>
+    public class GetByUsernameQueryHandler : IRequestHandler<GetByUsernameQuery, ErrorOr<UserResponse>>
     {
         private readonly IUserRepository _repository;
 
@@ -19,7 +20,7 @@ namespace Application.Users.GetBy.Username
             _repository = repository;
         }
 
-        public async Task<UserResponse> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<UserResponse>> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
         {
             var user = await _repository.GetByUserName(request.Username);
             if(user == null)

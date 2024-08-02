@@ -1,36 +1,49 @@
-﻿using FluentValidation;
+﻿using ErrorOr;
+using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Behaviors
 {
-    public class ValidationBehavior<TRequest, Tresponse> : IPipelineBehavior<TRequest, Tresponse>
+    public class ValidationBehavior<TRequest, TResponse> : 
+        IPipelineBehavior<TRequest, TResponse>
+            where TRequest : IRequest<TResponse>
+            where TResponse : IErrorOr
     {
-        private readonly IEnumerable<IValidator<TRequest>>_validators;
+        private readonly IValidator<TRequest>? _validator;
 
-        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IValidator<TRequest>? validator = null)
         {
-            _validators = validators;
+            _validator = validator;
         }
 
-        public async Task<Tresponse> Handle(TRequest request, RequestHandlerDelegate<Tresponse> next, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var context = new ValidationContext<TRequest>(request);
-            var validationTasks = _validators.Select(v => v.ValidateAsync(context));
-            var validationResults = await Task.WhenAll(validationTasks);
-            var failures = validationResults.SelectMany(result => result.Errors)
-                                            .Where(f => f != null)
-                                            .ToList();
-            if (failures.Any())
+            if(_validator is null)
             {
-                var errorMessages = string.Join("; ", failures.Select(f => f.ErrorMessage));
-                throw new ValidationException(errorMessages);
+                return await next();
             }
-            return await next();
+
+            var validatorResult = await _validator.ValidateAsync(request,cancellationToken);
+
+            if (validatorResult.IsValid)
+            {
+                return await next();
+            }
+
+            var errors = validatorResult.Errors
+                .ConvertAll(validationFailure=>Error.Validation(
+                        validationFailure.PropertyName,
+                        validationFailure.ErrorMessage
+                    ));
+            return (dynamic)errors;
         }
     }
 }

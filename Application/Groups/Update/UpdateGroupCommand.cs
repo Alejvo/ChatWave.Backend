@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,5 @@ namespace Application.Groups.Update
             string Id,
             string Name,
             string Description
-        ):IRequest;
+        ):IRequest<ErrorOr<Unit>>;
 }

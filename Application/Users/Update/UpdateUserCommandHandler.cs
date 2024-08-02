@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Update
 {
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
+    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand,ErrorOr<Unit>>
     {
         private readonly IUserRepository _repository;
 
@@ -19,7 +20,7 @@ namespace Application.Users.Update
             _repository = repository;
         }
 
-        public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _repository.GetById(UserProcedures.GetUserById,new { request.Id });
 
@@ -37,7 +38,7 @@ namespace Application.Users.Update
                 };
                 await _repository.UpdateAsync(UserProcedures.UpdateUser,updatedUser);
             }
-        
+            return Unit.Value;
         }
     }
 }

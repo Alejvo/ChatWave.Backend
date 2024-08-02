@@ -10,7 +10,7 @@ namespace Application.Groups.Common;
 
 public record GroupResponse(
      string Name,
-     string Descrption,
+     string Description,
      IEnumerable<UserResponse?> Users
     )
 {

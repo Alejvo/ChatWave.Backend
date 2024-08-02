@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Utilities;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Delete
 {
-    public class DeleteGroupCommandHandler:IRequestHandler<DeleteGroupCommand>
+    public class DeleteGroupCommandHandler:IRequestHandler<DeleteGroupCommand, ErrorOr<Unit>>
     {
         private readonly IGroupRepository _repository;
 
@@ -18,13 +19,15 @@ namespace Application.Groups.Delete
             _repository = repository;
         }
 
-        public async Task Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
         {
             var group = await _repository.GetById(GroupProcedures.GetGroupById,new { request.Id });
             if(group != null)
             {
                 await _repository.DeleteAsync(GroupProcedures.DeleteGroup,new { request.Id });
             }
+
+            return Unit.Value;
         }
     }
 }

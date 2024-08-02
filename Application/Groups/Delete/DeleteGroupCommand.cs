@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Application.Groups.Delete
 {
-    public record DeleteGroupCommand(string Id):IRequest;
+    public record DeleteGroupCommand(string Id):IRequest<ErrorOr<Unit>>;
 }

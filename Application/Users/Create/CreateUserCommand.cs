@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace Application.Users.Create
             string Password,
             string UserName,
             DateTime Birthday
-        ):IRequest;
+        ):IRequest<ErrorOr<Unit>>;
 
 }
