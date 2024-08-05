@@ -21,12 +21,12 @@ namespace Application.Hubs
 
         public async Task SendMessageToUser(string connectionId,string sender, string receiver, string message)
         {
-            await _mediator.Send(new SendMessageToUserCommand(message,sender,receiver));
+            await _mediator.Send(new SendMessageToUserCommand(message,sender,receiver,DateTime.Now));
             await Clients.Client(connectionId).SendAsync("ReceiveMessage",sender,message);
         }
         public async Task SendMessageToGroup(string group, string sender, string message)
         {
-            await _mediator.Send(new SendGrupalMessageCommand(message,sender,group));
+            await _mediator.Send(new SendGrupalMessageCommand(message,sender,group, DateTime.Now));
             await Clients.Group(group).SendAsync("ReceiveMessage",sender,message);
         }
 

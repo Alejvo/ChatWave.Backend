@@ -11,6 +11,7 @@ namespace Application.Messages.Send.ToUser
     public record SendMessageToUserCommand(
             string Text,
             string SenderId,
-            string ReceiverId
+            string ReceiverId,
+        DateTime SentAt
         ) : IRequest<ErrorOr<Unit>>;
 }

@@ -11,7 +11,8 @@ namespace Application.Messages.Send.ToGroup
     public record SendGrupalMessageCommand(
             string Text,
             string SenderId,
-            string GroupId
+            string GroupId,
+            DateTime SentAt
         ) : IRequest<ErrorOr<Unit>>;
 
 }

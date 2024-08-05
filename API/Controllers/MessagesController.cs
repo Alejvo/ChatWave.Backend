@@ -1,14 +1,16 @@
 ﻿using Application.Messages.Get;
 using Application.Messages.Send.ToGroup;
+using Application.Messages.Send.ToUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Sockets;
 
 namespace API.Controllers
 {
     [Route("api/message")]
-    [Authorize]
+    //[Authorize]
     public class MessagesController : ApiController
     {
         private readonly IMediator _mediator;
@@ -17,14 +19,14 @@ namespace API.Controllers
         {
             _mediator = mediator;
         }
-        /*
+        
         [HttpPost]
         [Route("send/group")]
         public async Task<IActionResult> SendToGroup(SendGrupalMessageCommand command)
         {
             await _mediator.Send(command);
             return Ok("Send");
-        }*/
+        }
 
         [HttpGet]
         [Route("get/group/{id}")]
@@ -36,20 +38,20 @@ namespace API.Controllers
                 errors => Problem(errors)
                 );
         }
-        /*
+        
         [HttpPost]
         [Route("send/user")]
         public async Task<IActionResult> SendToUser(SendMessageToUserCommand command)
         {
             await _mediator.Send(command);
             return Ok("Send");
-        }*/
+        }
 
         [HttpGet]
-        [Route("get/user/{id}")]
-        public async Task<IActionResult> GetUserMessages([FromRoute] string id)
+        [Route("get")]
+        public async Task<IActionResult> GetUserMessages([FromQuery] string receiver, [FromQuery] string sender)
         {
-            var userMessages = await _mediator.Send(new GetUserMessagesQuery(id));
+            var userMessages = await _mediator.Send(new GetUserMessagesQuery(receiver,sender));
             return userMessages.Match(
                 res=>Ok(res),
                 errors=>Problem(errors)

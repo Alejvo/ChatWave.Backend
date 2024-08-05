@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Domain.Interfaces
     {
         Task SendToUser(object param);
         Task SendToGroup(object param);
-        Task<IEnumerable<MessageResponse>> GetGroupMessages(string group);
-        Task<IEnumerable<MessageResponse>> GetUserMessages(string user);
+        Task<IEnumerable<MessagesByGroup>> GetGroupMessages(string group);
+        Task<IEnumerable<MessagesBySender>> GetUserMessages(string receiver,string sender);
     }
 }

@@ -39,7 +39,7 @@ namespace Infrastructure.Data.Repositories
                     return currentGroup;
                 },
                 CommandType.StoredProcedure,
-                splitOn: "Id"
+                splitOn: "GroupId"
                );
             return groupDictionary.Values;
         }

@@ -25,7 +25,8 @@ namespace Application.Messages.Send.ToGroup
                 MessageId = Guid.NewGuid().ToString(),
                 request.Text,
                 request.SenderId,
-                request.GroupId
+                request.GroupId,
+                request.SentAt
             };
             await _repository.SendToGroup(param);
             return Unit.Value;

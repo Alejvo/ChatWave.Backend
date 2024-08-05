@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.Messages;
 using ErrorOr;
 using MediatR;
 using System;
@@ -9,6 +10,6 @@ using System.Threading.Tasks;
 
 namespace Application.Messages.Get
 {
-    public record GetGrupalMessagesQuery(string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessageResponse>>>;
+    public record GetGrupalMessagesQuery(string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessagesByGroup>>>;
   
 }

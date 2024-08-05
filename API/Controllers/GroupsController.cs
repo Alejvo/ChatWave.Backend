@@ -13,7 +13,7 @@ using Application.Groups.Get.Id;
 namespace API.Controllers
 {
     [Route("api/groups")]
-    [Authorize]
+    //[Authorize]
     public class GroupsController : ApiController
     {
         private readonly IMediator _mediator;

@@ -25,7 +25,8 @@ namespace Application.Messages.Send.ToUser
                 MessageId = Guid.NewGuid().ToString(),
                 request.Text,
                 request.SenderId,
-                request.ReceiverId
+                request.ReceiverId,
+                request.SentAt
             };
             await _repository.SendToUser(param);
             return Unit.Value;
