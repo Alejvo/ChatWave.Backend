@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Models.Messages
 {
-    public class Message
+    public class Friend
     {
         public string Id { get; set; }
-        public string Text { get; set; }
-        public string SenderId { get; set; }
-        public DateTime SentAt { get; set; }
+        public string Name { get; set; }
     }
 }

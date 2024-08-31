@@ -1,15 +1,19 @@
-﻿using Application.Messages.Send.ToGroup;
+﻿using Application.Messages.Get;
+using Application.Messages.Send.ToGroup;
 using Application.Messages.Send.ToUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Hubs
 {
+    [Authorize]
     public class ChatHub:Hub
     {
         private readonly IMediator _mediator;
@@ -19,10 +23,16 @@ namespace Application.Hubs
             _mediator = mediator;
         }
 
-        public async Task SendMessageToUser(string connectionId,string sender, string receiver, string message)
+        public async Task SendMessageToUser(string receiver,string sender,string message)
         {
-            await _mediator.Send(new SendMessageToUserCommand(message,sender,receiver,DateTime.Now));
-            await Clients.Client(connectionId).SendAsync("ReceiveMessage",sender,message);
+            var newMessage = await _mediator.Send(new SendMessageToUserCommand(message,sender,receiver));
+            await Clients.User(receiver).SendAsync("ReceiveMessage",newMessage.Value);
+            await Clients.User(sender).SendAsync("ReceiveMessage",newMessage.Value);
+        }
+        public async Task GetUserMessages(string receiver,string sender)
+        {
+            var messages = await _mediator.Send(new GetUserMessagesQuery(receiver,sender));
+            await Clients.Caller.SendAsync("ReceiveMessageHistory",messages.Value);
         }
         public async Task SendMessageToGroup(string group, string sender, string message)
         {

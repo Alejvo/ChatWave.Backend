@@ -1,8 +1,10 @@
 ﻿using Application.Behaviors;
+using Application.Hubs;
 using Application.Services;
 using Domain.Interfaces;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ namespace Application
             {
                 config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
             });
-            
+            services.AddSignalR();
             services.AddScoped(
                 typeof(IPipelineBehavior<,>),
                 typeof(ValidationBehavior<,>));
@@ -28,6 +30,8 @@ namespace Application
             services.AddScoped<IAuthService,AuthService>();
 
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
+
+            services.AddSingleton<IUserIdProvider,AppUserIdProvider>();
             return services;
         }
     }

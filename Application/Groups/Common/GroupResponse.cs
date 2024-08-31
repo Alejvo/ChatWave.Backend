@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace Application.Groups.Common;
 
 public record GroupResponse(
+    string Id,
      string Name,
      string Description,
      IEnumerable<UserResponse?> Users
@@ -22,6 +23,7 @@ public record GroupResponse(
         }
         return new GroupResponse
         (
+            group.Id,
            group.Name,
            group.Description,
           group.Users.Select(user => UserResponse.ToUserResponse(user))

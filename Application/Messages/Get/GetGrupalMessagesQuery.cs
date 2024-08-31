@@ -10,6 +10,6 @@ using System.Threading.Tasks;
 
 namespace Application.Messages.Get
 {
-    public record GetGrupalMessagesQuery(string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessagesByGroup>>>;
+    public record GetGrupalMessagesQuery(string receiverId,string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessagesByGroup>>>;
   
 }

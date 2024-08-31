@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+﻿using Domain.Models.Messages;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ namespace Application.Messages.Send.ToUser
     public record SendMessageToUserCommand(
             string Text,
             string SenderId,
-            string ReceiverId,
-        DateTime SentAt
-        ) : IRequest<ErrorOr<Unit>>;
+            string ReceiverId
+        ) : IRequest<ErrorOr<MessageRequest>>;
 }

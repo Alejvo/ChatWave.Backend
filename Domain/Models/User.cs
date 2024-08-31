@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,8 @@ namespace Domain.Models
         public DateTime Birthday { get; set; }
         public string UserName { get; set; }
 
-        
+        public List<Friend> Friends { get; set; } = new List<Friend>();
+        public List<string> Groups { get; set; } = new List<string>();
 
     }
 }

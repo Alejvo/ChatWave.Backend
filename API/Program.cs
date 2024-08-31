@@ -1,5 +1,6 @@
 using API.Middlewares;
 using Application;
+using Application.Hubs;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +21,6 @@ builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
 var key = builder.Configuration.GetValue<string>("JwtSettings:Key");
 var keyBytes = Encoding.ASCII.GetBytes(key!);
-
 builder.Services.AddAuthentication(config =>
 {
     config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,14 +38,33 @@ builder.Services.AddAuthentication(config =>
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
+    //Supposedly enable token to Signalr Connections
+    config.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            Console.WriteLine(accessToken);
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/chatHub")))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+
+
 });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "ChatWavePolicy",
             policy =>
             {
-                policy.AllowAnyOrigin()
+                policy.WithOrigins("http://localhost:4200")
                        .AllowAnyMethod()
+                       .AllowCredentials()
                        .AllowAnyHeader();
             });
 });
@@ -59,6 +78,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("ChatWavePolicy");
+app.MapHub<ChatHub>("/chatHub");
 app.UseHttpsRedirection();
 app.UseErrorHandlingMiddleware();
 app.UseAuthentication();

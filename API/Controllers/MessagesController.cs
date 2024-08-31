@@ -29,10 +29,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("get/group/{id}")]
-        public async Task<IActionResult> GetGrupalMessages([FromRoute] string id)
+        [Route("get/receiver/{receiverId}/group/{groupId}")]
+        public async Task<IActionResult> GetGrupalMessages([FromRoute] string receiverId, [FromRoute] string groupId)
         {
-            var grupalMessages = await _mediator.Send(new GetGrupalMessagesQuery(id));
+            var grupalMessages = await _mediator.Send(new GetGrupalMessagesQuery(receiverId,groupId));
             return grupalMessages.Match(
                 res => Ok(res),
                 errors => Problem(errors)
@@ -44,14 +44,15 @@ namespace API.Controllers
         public async Task<IActionResult> SendToUser(SendMessageToUserCommand command)
         {
             await _mediator.Send(command);
-            return Ok("Send");
+            Console.WriteLine($"Sender:{command.SenderId},Receiver:{command.ReceiverId}");
+            return Ok();
         }
 
         [HttpGet]
-        [Route("get")]
-        public async Task<IActionResult> GetUserMessages([FromQuery] string receiver, [FromQuery] string sender)
+        [Route("get/receiver/{receiver}/sender/{sender}")]
+        public async Task<IActionResult> GetUserMessages([FromRoute] string receiver, [FromRoute] string sender)
         {
-            var userMessages = await _mediator.Send(new GetUserMessagesQuery(receiver,sender));
+            var userMessages = await _mediator.Send(new GetUserMessagesQuery(ReceiverId:receiver,SenderId:sender));
             return userMessages.Match(
                 res=>Ok(res),
                 errors=>Problem(errors)

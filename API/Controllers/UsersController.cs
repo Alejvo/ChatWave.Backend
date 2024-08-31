@@ -89,14 +89,15 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var user = await _userRepository.LoginUser(request.Email,request.Password);
             if(user != null)
             {
-                var token = _authService.GenerateToken(user.Id);
+                var token = _authService.GenerateToken(user.Id,user.UserName);
                 var refreshToken = _authService.GenerateRefreshToken();
-                await _authService.SaveRefreshToken("6e283f95-1579-4e92-94c1-0dd386cbea74", refreshToken);
+                await _authService.SaveRefreshToken(user.Id, refreshToken);
                 return Ok(new { token, refreshToken });
             }
             return BadRequest();

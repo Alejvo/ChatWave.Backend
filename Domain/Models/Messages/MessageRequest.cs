@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Models.Messages
 {
-    public class MessagesByGroup
+    public class MessageRequest
     {
-        public string SenderId { get; set; }
-        public string GroupId { get; set; }
+        public string MessageId { get; set; }
         public string Text { get; set; }
+        public string SenderId { get; set; }
+        public string ReceiverId { get; set; }
         public DateTime SentAt { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Users.Common;
+using Domain.Models;
 using ErrorOr;
 using MediatR;
 using System;

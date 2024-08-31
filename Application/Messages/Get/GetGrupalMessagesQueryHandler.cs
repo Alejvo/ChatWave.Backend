@@ -22,7 +22,7 @@ namespace Application.Messages.Get
 
         public async Task<ErrorOr<IReadOnlyList<MessagesByGroup>>> Handle(GetGrupalMessagesQuery request, CancellationToken cancellationToken)
         {
-            var grupalMessage = await _repository.GetGroupMessages(request.GroupId);
+            var grupalMessage = await _repository.GetGroupMessages(request.receiverId,request.GroupId);
             var response = grupalMessage.ToList();
             return response;
         }

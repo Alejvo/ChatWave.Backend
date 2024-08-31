@@ -39,7 +39,7 @@ namespace Application.Services
             return refreshToken;
         }
 
-        public string GenerateToken(string userId)
+        public string GenerateToken(string userId, string username)
         {
             var key = _configuration.GetValue<string>("JwtSettings:Key");
             var keyBytes = Encoding.ASCII.GetBytes(key!);
@@ -47,7 +47,8 @@ namespace Application.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, userId)
+                    new Claim(JwtRegisteredClaimNames.Sub,userId),
+                    new Claim(JwtRegisteredClaimNames.UniqueName,username)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes),SecurityAlgorithms.HmacSha256Signature)
