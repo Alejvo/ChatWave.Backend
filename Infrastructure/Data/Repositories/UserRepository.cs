@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Domain.Interfaces;
 using Domain.Models;
-using Domain.Models.Messages;
+using Domain.Models.Users;
 using Domain.Utilities;
 using Infrastructure.Data.Factories;
 using Microsoft.Data.SqlClient;
@@ -28,16 +28,22 @@ namespace Infrastructure.Data.Repositories
                 storedProcedure,
                 (user, group, friend) =>
                 {
+                    
                     if (!userDictionary.TryGetValue(user.Id, out var userEntry))
                     {
                         userEntry = user;
-                        userEntry.Groups = new List<string>();
+                        userEntry.Groups = new List<UserGroup>();
                         userEntry.Friends = new List<Friend>();
                         userDictionary.Add(userEntry.Id, userEntry);
                     }
-                    if (group.Name != null && !userEntry.Groups.Any(g => g == group.Name))
+                    if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
                     {
-                        userEntry.Groups.Add(group.Name);
+                        var newGroup = new UserGroup
+                        {
+                            Id = group.Id,
+                            Name = group.Name
+                        };
+                        userEntry.Groups.Add(newGroup);
                     }
                     if (friend.UserName != null && !userEntry.Friends.Any(f=>f.Name ==friend.UserName))
                     {
@@ -51,7 +57,7 @@ namespace Infrastructure.Data.Repositories
                     return userEntry;
                 },
                 commandType: CommandType.StoredProcedure,
-                splitOn: "GroupId,Id"
+                splitOn: "Id,Id"
                 );
             return userDictionary.Values;
         }
@@ -67,13 +73,18 @@ namespace Infrastructure.Data.Repositories
                     if(!userDictionary.TryGetValue(user.Id,out var userEntry))
                     {
                         userEntry = user;
-                        userEntry.Groups = new List<string>();
+                        userEntry.Groups = new List<UserGroup>();
                         userEntry.Friends = new List<Friend>();
                         userDictionary.Add(userEntry.Id,userEntry);
                     }
-                    if(group.Name != null && !userEntry.Groups.Any(g => g == group.Name))
+                    if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
                     {
-                        userEntry.Groups.Add(group.Name);
+                        var newGroup = new UserGroup
+                        {
+                            Id= group.Id,
+                            Name = group.Name
+                        };
+                        userEntry.Groups.Add(newGroup);
                     }
                     if (friend.UserName != null && !userEntry.Friends.Any(f => f.Name == friend.UserName))
                     {
@@ -88,7 +99,7 @@ namespace Infrastructure.Data.Repositories
                 },
                 param: param,
                 commandType:CommandType.StoredProcedure,
-                splitOn:"GroupId,Id"
+                splitOn:"Id,Id"
                 );
             return userDictionary.Values.FirstOrDefault();
         }

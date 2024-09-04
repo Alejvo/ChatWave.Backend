@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+﻿using Domain.Models.Messages;
+using ErrorOr;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,6 @@ namespace Application.Messages.Send.ToGroup
             string SenderId,
             string GroupId,
             DateTime SentAt
-        ) : IRequest<ErrorOr<Unit>>;
+        ) : IRequest<ErrorOr<MessageRequest>>;
 
 }

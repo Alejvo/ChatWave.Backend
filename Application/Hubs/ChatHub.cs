@@ -1,6 +1,8 @@
-﻿using Application.Messages.Get;
+﻿using Application.Messages.Get.Group;
+using Application.Messages.Get.User;
 using Application.Messages.Send.ToGroup;
 using Application.Messages.Send.ToUser;
+using Domain.Models.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -23,6 +25,12 @@ namespace Application.Hubs
             _mediator = mediator;
         }
 
+        public override Task OnConnectedAsync()
+        {
+            Console.WriteLine($"ConnId:{Context.ConnectionId}, User:{Context.UserIdentifier}");
+            return base.OnConnectedAsync();
+        }
+
         public async Task SendMessageToUser(string receiver,string sender,string message)
         {
             var newMessage = await _mediator.Send(new SendMessageToUserCommand(message,sender,receiver));
@@ -34,20 +42,21 @@ namespace Application.Hubs
             var messages = await _mediator.Send(new GetUserMessagesQuery(receiver,sender));
             await Clients.Caller.SendAsync("ReceiveMessageHistory",messages.Value);
         }
+
+        public async Task GetGroupMessages(string group, string user)
+        {
+            var messages = await _mediator.Send(new GetGrupalMessagesQuery(user,group));
+            await Groups.AddToGroupAsync(Context.ConnectionId, group);
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages.Value);
+        }
         public async Task SendMessageToGroup(string group, string sender, string message)
         {
-            await _mediator.Send(new SendGrupalMessageCommand(message,sender,group, DateTime.Now));
-            await Clients.Group(group).SendAsync("ReceiveMessage",sender,message);
+ 
+                var newMessage = await _mediator.Send(new SendGrupalMessageCommand(message, sender, group, DateTime.Now));
+                await Clients.Group(group).SendAsync("ReceiveMessage", newMessage.Value);
+            
+
         }
 
-        public async Task AddToGroup(string group)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId,group);
-        }
-
-        public async Task RemoveFromGroup(string group)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId,group);
-        }
     }
 }

@@ -1,11 +1,10 @@
-﻿using Domain.Models.Messages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Domain.Models.Users
 {
     public class User
     {
@@ -16,9 +15,8 @@ namespace Domain.Models
         public string Password { get; set; }
         public DateTime Birthday { get; set; }
         public string UserName { get; set; }
+        public List<UserGroup> Groups { get; set; } = new List<UserGroup>();
 
         public List<Friend> Friends { get; set; } = new List<Friend>();
-        public List<string> Groups { get; set; } = new List<string>();
-
     }
 }

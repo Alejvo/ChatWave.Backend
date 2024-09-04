@@ -25,12 +25,13 @@ namespace Application.Messages.Send.ToUser
 
         public async Task<ErrorOr<MessageRequest>> Handle(SendMessageToUserCommand request, CancellationToken cancellationToken)
         {
+
             var message = new MessageRequest
             {
                 MessageId = Guid.NewGuid().ToString(),
-                Text=request.Text,
+                Text = request.Text,
                 SenderId = request.SenderId,
-                ReceiverId= request.ReceiverId,
+                ReceiverId = request.ReceiverId,
                 SentAt = DateTime.UtcNow
             };
             await _repository.SendToUser(message);

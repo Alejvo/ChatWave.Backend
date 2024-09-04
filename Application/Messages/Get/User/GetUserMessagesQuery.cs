@@ -8,8 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Messages.Get
+namespace Application.Messages.Get.User
 {
-    public record GetUserMessagesQuery(string ReceiverId,string SenderId): IRequest<ErrorOr<IReadOnlyList<MessagesBySender>>>;
+    public record GetUserMessagesQuery(string ReceiverId, string SenderId) : IRequest<ErrorOr<IReadOnlyList<MessagesBySender>>>;
 
 }

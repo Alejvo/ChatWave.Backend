@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Messages.Get
+namespace Application.Messages.Get.Group
 {
     public class GetGrupalMessagesQueryHandler : IRequestHandler<GetGrupalMessagesQuery, ErrorOr<IReadOnlyList<MessagesByGroup>>>
     {
@@ -22,7 +22,7 @@ namespace Application.Messages.Get
 
         public async Task<ErrorOr<IReadOnlyList<MessagesByGroup>>> Handle(GetGrupalMessagesQuery request, CancellationToken cancellationToken)
         {
-            var grupalMessage = await _repository.GetGroupMessages(request.receiverId,request.GroupId);
+            var grupalMessage = await _repository.GetGroupMessages(request.receiverId, request.GroupId);
             var response = grupalMessage.ToList();
             return response;
         }

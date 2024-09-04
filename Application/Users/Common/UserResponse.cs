@@ -1,5 +1,4 @@
-﻿using Domain.Models;
-using Domain.Models.Messages;
+﻿using Domain.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +13,13 @@ namespace Application.Users.Common
             string FullName,
             string UserName,
             int Age,
-            List<string> Groups,
+            List<UserGroup> Groups,
             List<Friend> Friends
     )
     {
         public static UserResponse ToUserResponse(User user)
         {
-            if (user == null) return null;
+            if (user == null) return default;
             return new UserResponse
             (
                user.Id,

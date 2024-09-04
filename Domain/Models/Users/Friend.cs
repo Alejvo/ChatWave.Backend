@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models.Messages
+namespace Domain.Models.Users
 {
     public class Friend
     {

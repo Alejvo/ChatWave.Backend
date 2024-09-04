@@ -14,7 +14,6 @@ namespace Application.Hubs
         {
 
             var userId = connection.User?.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value ?? "jijijija";
-            Console.WriteLine($"User Id From JWT: {userId}");
             return userId;
         }
     }

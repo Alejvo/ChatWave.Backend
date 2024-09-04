@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Domain.Interfaces;
 using Domain.Models;
+using Domain.Models.Users;
 using Infrastructure.Data.Factories;
 using System;
 using System.Collections.Generic;

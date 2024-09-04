@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
+using Domain.Models.Users;
 using Domain.Utilities;
 using ErrorOr;
 using MediatR;
@@ -22,7 +23,7 @@ namespace Application.Users.Create
 
         public async Task<ErrorOr<Unit>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User 
+            var user = new User
             { 
                 Id = Guid.NewGuid().ToString(),
                 UserName = request.UserName ,

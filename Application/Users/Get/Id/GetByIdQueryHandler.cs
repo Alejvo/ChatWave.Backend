@@ -1,6 +1,6 @@
 ﻿using Application.Users.Common;
 using Domain.Interfaces;
-using Domain.Models;
+using Domain.Models.Users;
 using Domain.Utilities;
 using ErrorOr;
 using MediatR;

@@ -8,8 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Messages.Get
+namespace Application.Messages.Get.Group
 {
-    public record GetGrupalMessagesQuery(string receiverId,string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessagesByGroup>>>;
-  
+    public record GetGrupalMessagesQuery(string receiverId, string GroupId) : IRequest<ErrorOr<IReadOnlyList<MessagesByGroup>>>;
+
 }

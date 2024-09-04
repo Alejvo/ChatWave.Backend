@@ -8,6 +8,7 @@ using Application.Users.Update;
 using Domain.Interfaces;
 using Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -15,6 +16,7 @@ using System.Reflection;
 namespace API.Controllers
 {
     [Route("api/users")]
+    //[Authorize]
     public class UsersController : ApiController
     {
         private readonly IMediator _mediator;
@@ -59,6 +61,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             var createdUser =await _mediator.Send(command);
@@ -90,6 +93,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var user = await _userRepository.LoginUser(request.Email,request.Password);

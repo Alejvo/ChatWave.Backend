@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Messages.Get
+namespace Application.Messages.Get.User
 {
     public class GetUserMessagesQueryHandler : IRequestHandler<GetUserMessagesQuery, ErrorOr<IReadOnlyList<MessagesBySender>>>
     {
@@ -20,9 +20,9 @@ namespace Application.Messages.Get
             _repository = repository;
         }
 
-        public async Task<ErrorOr<IReadOnlyList<MessagesBySender>>>Handle(GetUserMessagesQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<IReadOnlyList<MessagesBySender>>> Handle(GetUserMessagesQuery request, CancellationToken cancellationToken)
         {
-            var userMessages = await _repository.GetUserMessages(request.ReceiverId,request.SenderId);
+            var userMessages = await _repository.GetUserMessages(request.ReceiverId, request.SenderId);
             var response = userMessages.ToList();
             return response;
         }
