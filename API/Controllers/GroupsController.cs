@@ -1,7 +1,7 @@
-﻿using Application.Groups.Create;
+﻿
+using Application.Groups.Create;
 using Application.Groups.Delete;
 using Application.Groups.Get.All;
-using Application.Groups;
 using Application.Groups.Update;
 using Application.Groups.Users.Add;
 using Application.Groups.Users.Remove;
@@ -13,7 +13,7 @@ using Application.Groups.Get.Id;
 namespace API.Controllers
 {
     [Route("api/groups")]
-    [Authorize]
+    //[Authorize]
     public class GroupsController : ApiController
     {
         private readonly IMediator _mediator;

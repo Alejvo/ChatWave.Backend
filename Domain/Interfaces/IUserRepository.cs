@@ -13,5 +13,6 @@ namespace Domain.Interfaces
         Task<bool> IsEmailUnique(string email);
         Task<bool> IsUserNameUnique(string username);
         Task<User> LoginUser(string email,string password);
+        Task AddFriend(string userId, string friendId);
     }
 }

@@ -20,6 +20,12 @@ namespace Infrastructure.Data.Repositories
         {
         }
 
+        public async Task AddFriend(string userId, string friendId)
+        {
+            using var connection = _sqlConnection.CreateConnection();
+            await connection.QueryAsync(UserProcedures.AddFriend,new {userId,friendId});
+        }
+
         public async override Task<IEnumerable<User>> GetAll(string storedProcedure)
         {
            using var connection = _sqlConnection.CreateConnection();
@@ -45,7 +51,7 @@ namespace Infrastructure.Data.Repositories
                         };
                         userEntry.Groups.Add(newGroup);
                     }
-                    if (friend.UserName != null && !userEntry.Friends.Any(f=>f.Name ==friend.UserName))
+                    if (friend != null && !userEntry.Friends.Any(f=>f.Name ==friend.UserName))
                     {
                         var newFriend = new Friend
                         {

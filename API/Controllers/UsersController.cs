@@ -1,6 +1,7 @@
 ﻿using Application.Users.Common;
 using Application.Users.Create;
 using Application.Users.Delete;
+using Application.Users.Friends;
 using Application.Users.Get.All;
 using Application.Users.GetBy.Id;
 using Application.Users.GetBy.Username;
@@ -59,17 +60,6 @@ namespace API.Controllers
                 errors => Problem(errors));
         }
 
-        [HttpPost]
-        [Route("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
-        {
-            var createdUser =await _mediator.Send(command);
-            return createdUser.Match(
-                x=>Ok(x),
-                errors=>Problem(errors));
-        }
-
         [HttpPut]
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
@@ -105,7 +95,25 @@ namespace API.Controllers
                 return Ok(new { token, refreshToken });
             }
             return BadRequest();
+        }
 
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+        {
+            var createdUser = await _mediator.Send(command);
+            return createdUser.Match(
+                x => Ok(x),
+                errors => Problem(errors));
+        }
+
+        [HttpPost]
+        [Route("add-friend")]
+        public async Task<IActionResult> AddFriend([FromBody] AddFriendCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Match((res) => NoContent(), (errors) => Problem(errors));
         }
 
     }
