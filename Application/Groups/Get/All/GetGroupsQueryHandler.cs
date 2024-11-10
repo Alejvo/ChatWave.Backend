@@ -1,6 +1,6 @@
-﻿using Application.Groups.Common;
-using Application.Users.Common;
+﻿using Application.Users.Common;
 using Domain.Interfaces;
+using Domain.Models.Groups;
 using Domain.Utilities;
 using ErrorOr;
 using MediatR;
@@ -25,11 +25,8 @@ namespace Application.Groups.Get.All
         public async Task<ErrorOr<IReadOnlyList<GroupResponse>>> Handle(GetGroupsQuery request, CancellationToken cancellationToken)
         {
             var groups =await _repository.GetAll(GroupProcedures.GetGroups);
-            var groupsResponse = groups.Select(group =>
 
-                GroupResponse.ToGroupResponse(group)
-            ).ToList();
-            return groupsResponse;
+            return groups.ToList();
         }
     }
 }

@@ -17,7 +17,7 @@ using System.Reflection;
 namespace API.Controllers
 {
     [Route("api/users")]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ApiController
     {
         private readonly IMediator _mediator;

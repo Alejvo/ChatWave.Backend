@@ -9,11 +9,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Groups.Get.Id;
+using Application.Groups.Get.Name;
 
 namespace API.Controllers
 {
     [Route("api/groups")]
-    //[Authorize]
+   [Authorize]
     public class GroupsController : ApiController
     {
         private readonly IMediator _mediator;
@@ -38,6 +39,16 @@ namespace API.Controllers
         public async Task<IActionResult> GetGroupById(string id)
         {
             var group = await _mediator.Send(new GetGroupByIdQuery(id));
+            return group.Match(
+                res => Ok(res),
+                errors => Problem(errors)
+                );
+        }
+        [HttpGet]
+        [Route("{name}")]
+        public async Task<IActionResult> GetGroupByName(string name)
+        {
+            var group = await _mediator.Send(new GetGroupsByNameQuery(name));
             return group.Match(
                 res => Ok(res),
                 errors => Problem(errors)

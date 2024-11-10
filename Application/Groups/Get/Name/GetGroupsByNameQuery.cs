@@ -7,7 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Groups.Get.All
+namespace Application.Groups.Get.Name
 {
-    public record GetGroupsQuery():IRequest<ErrorOr<IReadOnlyList<GroupResponse>>>;
+    public record GetGroupsByNameQuery
+        (
+            string name
+        ) :IRequest<ErrorOr<IReadOnlyList<GroupResponse>>>;
 }

@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using Domain.Interfaces;
-using Domain.Models;
+using Domain.Models.Groups;
 using Domain.Models.Users;
+using Domain.Utilities;
 using Infrastructure.Data.Factories;
 using System;
 using System.Collections.Generic;
@@ -12,65 +13,34 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class GroupRepository : Repository<Group>, IGroupRepository
+    public class GroupRepository : Repository<GroupResponse>, IGroupRepository
     {
         public GroupRepository(SqlConnectionFactory sqlConnection) : base(sqlConnection)
         {
         }
-        public override async Task<IEnumerable<Group>> GetAll(string storedProcedure)
+        public override async Task<IEnumerable<GroupResponse>> GetAll(string storedProcedure)
         {
             using var connection = _sqlConnection.CreateConnection();
-            var groupDictionary = new Dictionary<string, Group>();
-            await connection.QueryAsync<Group, User, Group>(
-                storedProcedure,
-                (group, user) =>
-                {
-                    if (!groupDictionary.TryGetValue(group.Id, out var currentGroup))
-                    {
-                        currentGroup = group;
-                        currentGroup.Users = new List<User>();
-                        groupDictionary.Add(currentGroup.Id, currentGroup);
-                    }
-
-                    if (user != null && user.Id != default(string))
-                    {
-                        currentGroup.Users.Add(user);
-                    }
-
-                    return currentGroup;
-                },
-                CommandType.StoredProcedure,
-                splitOn: "Id"
-               );
-            return groupDictionary.Values;
+            return await connection.QueryAsync<GroupResponse>(storedProcedure);
         }
-        public override async Task<Group?> GetById(string storedProcedure, object param)
+        public override async Task<GroupResponse?> GetById(string storedProcedure, object param)
         {
             using var connection = _sqlConnection.CreateConnection();
-            var groupDictionary = new Dictionary<string, Group>();
-            var group = await connection.QueryAsync<Group, User, Group>(
-                storedProcedure,
-                (group, user) =>
-                {
-                    if (!groupDictionary.TryGetValue(group.Id, out var currentGroup))
-                    {
-                        currentGroup = group;
-                        currentGroup.Users = new List<User>();
-                        groupDictionary.Add(currentGroup.Id, currentGroup);
-                    }
+            return await connection.QueryFirstOrDefaultAsync<GroupResponse>
+                (
+                    storedProcedure,
+                    param
+                );
+        }
 
-                    if (user != null && user.Id != default)
-                    {
-                        currentGroup.Users.Add(user);
-                    }
-
-                    return currentGroup;
-                },
-                param: param,
-                commandType: CommandType.StoredProcedure,
-                splitOn: "Id"
-               );
-            return group.FirstOrDefault();
+        public async Task<IEnumerable<GroupResponse>> GetByNames(string name)
+        {
+            using var connection = _sqlConnection.CreateConnection();
+            return await connection.QueryAsync<GroupResponse>
+                (
+                    GroupProcedures.GetGroupsName,
+                    new {name}
+                );
         }
         public async Task AddUserToGroup(string storedProcedure, string groupId, string userId)
         {

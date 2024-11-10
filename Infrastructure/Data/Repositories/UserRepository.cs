@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Domain.Interfaces;
-using Domain.Models;
+using Domain.Models.Groups;
 using Domain.Models.Users;
 using Domain.Utilities;
 using Infrastructure.Data.Factories;
@@ -114,7 +114,7 @@ namespace Infrastructure.Data.Repositories
         {
             using var connection = _sqlConnection.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<User>(
-                UserProcedures.GetUserByUsername,
+                UserProcedures.GetUsersByUsername,
                 new {username},
                 commandType: CommandType.StoredProcedure);
         }

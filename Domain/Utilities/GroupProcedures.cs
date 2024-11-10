@@ -9,6 +9,7 @@ namespace Domain.Utilities
     public static class GroupProcedures
     {
         public const string GetGroupById = "GetGroupById";
+        public const string GetGroupsName = "GetGroupsByName";
         public const string GetGroups = "GetGroups";
         public const string AddUser = "AddGroupUser";
         public const string RemoveUser = "DeleteGroupUser";

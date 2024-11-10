@@ -1,4 +1,4 @@
-﻿using Application.Groups.Common;
+﻿using Domain.Models.Groups;
 using ErrorOr;
 using MediatR;
 using System;

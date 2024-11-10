@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Models.Users;
 
-namespace Domain.Models
+namespace Domain.Models.Groups
 {
     public class Group
     {

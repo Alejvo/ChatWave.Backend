@@ -1,7 +1,6 @@
-﻿using Application.Groups.Common;
-using Application.Users.Common;
+﻿using Application.Users.Common;
 using Domain.Interfaces;
-using Domain.Models;
+using Domain.Models.Groups;
 using Domain.Utilities;
 using ErrorOr;
 using MediatR;
@@ -24,11 +23,11 @@ public class GetGroupByIdQueryHandler : IRequestHandler<GetGroupByIdQuery, Error
 
     public async Task<ErrorOr<GroupResponse>> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
     {
-        if (await _repository.GetById(GroupProcedures.GetGroupById, new { request.Id }) is not Group group)
+        if (await _repository.GetById(GroupProcedures.GetGroupById, new { request.Id }) is not GroupResponse group)
         {
             return Error.NotFound();
         }
-        return GroupResponse.ToGroupResponse(group);
+        return group;
     }
 
 }
