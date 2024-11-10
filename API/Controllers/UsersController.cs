@@ -104,7 +104,7 @@ namespace API.Controllers
         {
             var createdUser = await _mediator.Send(command);
             return createdUser.Match(
-                x => Ok(x),
+                _ => NoContent(),
                 errors => Problem(errors));
         }
 

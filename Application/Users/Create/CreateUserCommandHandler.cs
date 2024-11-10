@@ -34,7 +34,7 @@ namespace Application.Users.Create
                 Birthday = request.Birthday
                 
             };
-            await _repository.CreateAsync(UserProcedures.CreateUser,user);
+            await _repository.CreateAsync(UserProcedures.CreateUser, new {user.Id,user.FirstName,user.LastName,user.Email,user.Password,user.Birthday,user.UserName});
             return Unit.Value;
         }
     }
