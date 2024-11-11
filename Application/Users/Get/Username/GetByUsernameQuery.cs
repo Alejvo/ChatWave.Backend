@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace Application.Users.GetBy.Username
 {
-    public record GetByUsernameQuery(string Username):IRequest<ErrorOr<UserResponse>>;
+    public record GetByUsernameQuery(string Username):IRequest<ErrorOr<IEnumerable<UserResponse>>>;
 
 }

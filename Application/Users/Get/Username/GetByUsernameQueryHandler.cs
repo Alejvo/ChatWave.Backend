@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.GetBy.Username
 {
-    public class GetByUsernameQueryHandler : IRequestHandler<GetByUsernameQuery, ErrorOr<UserResponse>>
+    public class GetByUsernameQueryHandler : IRequestHandler<GetByUsernameQuery, ErrorOr<IEnumerable<UserResponse>>>
     {
         private readonly IUserRepository _repository;
 
@@ -20,14 +20,15 @@ namespace Application.Users.GetBy.Username
             _repository = repository;
         }
 
-        public async Task<ErrorOr<UserResponse>> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<IEnumerable<UserResponse>>> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
         {
-            var user = await _repository.GetByUserName(request.Username);
+            var user = await _repository.GetUsersByUsername(request.Username);
             if(user == null)
             {
                 return default;
             }
-            return UserResponse.ToUserResponse(user);
+            var userResponse = user.Select(user=> UserResponse.ToUserResponse(user));
+            return userResponse.ToList();
         }
     }
 }

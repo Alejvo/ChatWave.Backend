@@ -9,7 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IUserRepository:IRepository<User>
     {
-        Task<User?> GetByUserName(string username);
+        Task<IEnumerable<User>> GetUsersByUsername(string username);
         Task<bool> IsEmailUnique(string email);
         Task<bool> IsUserNameUnique(string username);
         Task<User> LoginUser(string email,string password);

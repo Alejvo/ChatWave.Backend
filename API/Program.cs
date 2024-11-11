@@ -61,7 +61,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "ChatWavePolicy",
             policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("http://localhost:4200","http://192.168.1.114:4200")
                        .AllowAnyMethod()
                        .AllowCredentials()
                        .AllowAnyHeader();
