@@ -14,7 +14,8 @@ namespace Application.Users.Common
             string UserName,
             int Age,
             List<UserGroup> Groups,
-            List<Friend> Friends
+            List<Friend> Friends,
+            string ProfileImage
     )
     {
         public static UserResponse ToUserResponse(User user)
@@ -27,7 +28,9 @@ namespace Application.Users.Common
                user.UserName,
                GetAge(user.Birthday),
                user.Groups,
-               user.Friends
+               user.Friends,
+               user.ProfileImage !=null ? Convert.ToBase64String(user.ProfileImage) :null
+               
             );
         }
 

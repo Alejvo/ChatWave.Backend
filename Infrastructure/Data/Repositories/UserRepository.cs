@@ -56,7 +56,8 @@ namespace Infrastructure.Data.Repositories
                         var newFriend = new Friend
                         {
                             Id = friend.Id,
-                            Name = friend.UserName
+                            Name = friend.UserName,
+                            ProfileImage = Convert.ToBase64String(friend.ProfileImage)
                         };
                         userEntry.Friends.Add(newFriend);
                     }
@@ -97,7 +98,8 @@ namespace Infrastructure.Data.Repositories
                         var newFriend = new Friend
                         {
                             Id = friend.Id,
-                            Name = friend.UserName
+                            Name = friend.UserName,
+                            ProfileImage = Convert.ToBase64String(friend.ProfileImage)
                         };
                         userEntry.Friends.Add(newFriend);
                     }
@@ -139,7 +141,8 @@ namespace Infrastructure.Data.Repositories
                         var newFriend = new Friend
                         {
                             Id = friend.Id,
-                            Name = friend.UserName
+                            Name = friend.UserName,
+                            ProfileImage = Convert.ToBase64String(friend.ProfileImage)
                         };
                         userEntry.Friends.Add(newFriend);
                     }

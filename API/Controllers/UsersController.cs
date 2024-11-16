@@ -62,7 +62,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserCommand command)
         {
             var updatedUser = await _mediator.Send(command);
             return updatedUser.Match(
@@ -100,8 +100,9 @@ namespace API.Controllers
         [HttpPost]
         [Route("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+        public async Task<IActionResult> CreateUser([FromForm] CreateUserCommand command)
         {
+
             var createdUser = await _mediator.Send(command);
             return createdUser.Match(
                 _ => NoContent(),

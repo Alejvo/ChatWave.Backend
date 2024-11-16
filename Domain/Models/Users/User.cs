@@ -15,6 +15,7 @@ namespace Domain.Models.Users
         public string Password { get; set; }
         public DateTime Birthday { get; set; }
         public string UserName { get; set; }
+        public byte[] ProfileImage { get; set; }
         public List<UserGroup> Groups { get; set; } = new List<UserGroup>();
 
         public List<Friend> Friends { get; set; } = new List<Friend>();

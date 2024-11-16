@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace Application.Users.Create
             string Email,
             string Password,
             string UserName,
-            DateTime Birthday
+            DateTime Birthday,
+            IFormFile ProfileImage
         ):IRequest<ErrorOr<Unit>>;
 
 }

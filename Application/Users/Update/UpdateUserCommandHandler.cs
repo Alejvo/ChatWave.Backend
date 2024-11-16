@@ -23,6 +23,15 @@ namespace Application.Users.Update
 
         public async Task<ErrorOr<Unit>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
+            byte[] profileImageBytes = null;
+            if (request.ProfileImage != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.ProfileImage.CopyToAsync(memoryStream);
+                    profileImageBytes = memoryStream.ToArray();
+                }
+            }
             var user = await _repository.GetById(UserProcedures.GetUserById,new { request.Id });
 
             if(user != null) 
@@ -35,7 +44,8 @@ namespace Application.Users.Update
                     Email = request.Email,
                     Password = request.Password,
                     Birthday = request.Birthday,
-                    UserName = request.UserName
+                    UserName = request.UserName,
+                    ProfileImage = profileImageBytes 
                 };
                 await _repository.UpdateAsync(UserProcedures.UpdateUser,updatedUser);
             }

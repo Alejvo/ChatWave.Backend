@@ -23,6 +23,15 @@ namespace Application.Users.Create
 
         public async Task<ErrorOr<Unit>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            byte[] profileImageBytes = null;
+            if (request.ProfileImage != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.ProfileImage.CopyToAsync(memoryStream);
+                    profileImageBytes = memoryStream.ToArray();
+                }
+            }
             var user = new User
             { 
                 Id = Guid.NewGuid().ToString(),
@@ -31,10 +40,11 @@ namespace Application.Users.Create
                 FirstName = request.FirstName ,
                 LastName = request.LastName,
                 Password = request.Password ,
-                Birthday = request.Birthday
+                Birthday = request.Birthday ,
+                ProfileImage = profileImageBytes
                 
             };
-            await _repository.CreateAsync(UserProcedures.CreateUser, new {user.Id,user.FirstName,user.LastName,user.Email,user.Password,user.Birthday,user.UserName});
+            await _repository.CreateAsync(UserProcedures.CreateUser, new {user.Id,user.FirstName,user.LastName,user.Email,user.Password,user.Birthday,user.UserName,user.ProfileImage});
             return Unit.Value;
         }
     }
