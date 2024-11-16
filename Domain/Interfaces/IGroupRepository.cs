@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IGroupRepository:IRepository<GroupResponse>
+    public interface IGroupRepository:IRepository<Group>
     {
-        Task<IEnumerable<GroupResponse?>> GetByNames(string name);
+        Task<IEnumerable<Group?>> GetByNames(string name);
         Task AddUserToGroup(string storedProcedure,string groupId,string userId);
         Task RemoveUserToGroup(string storedProcedure, string groupId,string userId);
     }

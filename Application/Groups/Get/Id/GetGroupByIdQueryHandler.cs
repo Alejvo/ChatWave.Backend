@@ -23,11 +23,13 @@ public class GetGroupByIdQueryHandler : IRequestHandler<GetGroupByIdQuery, Error
 
     public async Task<ErrorOr<GroupResponse>> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
     {
-        if (await _repository.GetById(GroupProcedures.GetGroupById, new { request.Id }) is not GroupResponse group)
+        if (await _repository.GetById(GroupProcedures.GetGroupById, new { request.Id }) is not Group group)
         {
             return Error.NotFound();
         }
-        return group;
+        var groupResponse = GroupResponse.ToGroupResponse(group);
+
+        return groupResponse;
     }
 
 }

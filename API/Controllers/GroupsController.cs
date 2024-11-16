@@ -57,7 +57,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateGroup([FromBody] CreateGroupCommand command)
+        public async Task<IActionResult> CreateGroup([FromForm] CreateGroupCommand command)
         {
             var createdGroup = await _mediator.Send(command);
             return createdGroup.Match(
@@ -68,7 +68,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> UpdateGroup([FromBody] UpdateGroupCommand command)
+        public async Task<IActionResult> UpdateGroup([FromForm] UpdateGroupCommand command)
         {
             var updatedGroup= await _mediator.Send(command);
             return updatedGroup.Match(

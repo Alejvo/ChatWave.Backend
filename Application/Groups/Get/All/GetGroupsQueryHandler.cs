@@ -25,8 +25,8 @@ namespace Application.Groups.Get.All
         public async Task<ErrorOr<IReadOnlyList<GroupResponse>>> Handle(GetGroupsQuery request, CancellationToken cancellationToken)
         {
             var groups =await _repository.GetAll(GroupProcedures.GetGroups);
-
-            return groups.ToList();
+            var groupResponse = groups.Select(group=>GroupResponse.ToGroupResponse(group)).ToList();
+            return groupResponse;
         }
     }
 }

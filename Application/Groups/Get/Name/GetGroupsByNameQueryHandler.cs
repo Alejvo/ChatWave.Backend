@@ -22,7 +22,9 @@ namespace Application.Groups.Get.Name
         public async Task<ErrorOr<IReadOnlyList<GroupResponse>>> Handle(GetGroupsByNameQuery request, CancellationToken cancellationToken)
         {
             var groups= await _repository.GetByNames(request.name);
-            return groups.ToList();
+            var groupResponse = groups.Select(group => GroupResponse.ToGroupResponse(group)).ToList();
+
+            return groupResponse;
         }
     }
 }

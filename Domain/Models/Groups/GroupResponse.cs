@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,21 @@ namespace Domain.Models.Groups
         string Id,
          string Name,
          string Description,
-         int Members
-        );
+         int Members,
+         string Image
+        )
+    {
+        public static GroupResponse ToGroupResponse(Group group)
+        {
+            if (group == null) return default;
+            return new GroupResponse
+            (
+               group.Id,
+               group.Name,
+               group.Description,
+               group.Users.Count,
+               group.Image != null ? Convert.ToBase64String(group.Image) : null
+            );
+        }
+    }
 }

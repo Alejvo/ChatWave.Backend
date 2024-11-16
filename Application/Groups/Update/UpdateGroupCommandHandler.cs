@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
+using Domain.Models.Groups;
 using Domain.Utilities;
 using ErrorOr;
 using MediatR;
@@ -22,10 +23,26 @@ namespace Application.Groups.Update
 
         public async Task<ErrorOr<Unit>> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
+            byte[] imageBytes = null;
+            if (request.Image != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.Image.CopyToAsync(memoryStream);
+                    imageBytes = memoryStream.ToArray();
+                }
+            }
             var group = await _repository.GetById(GroupProcedures.GetGroupById,new { request.Id });
             if(group != null)
             {
-                await _repository.UpdateAsync(GroupProcedures.UpdateGroup, new {request.Id,request.Name,request.Description});
+                var updatedGroup = new
+                {
+                    request.Id,
+                    request.Name,
+                    request.Description,
+                    imageBytes
+                };
+                await _repository.UpdateAsync(GroupProcedures.UpdateGroup, updatedGroup);
             }
 
             return Unit.Value;

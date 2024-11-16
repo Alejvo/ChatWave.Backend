@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Application.Groups.Update
     public record UpdateGroupCommand(
             string Id,
             string Name,
-            string Description
-        ):IRequest<ErrorOr<Unit>>;
+            string Description,
+            IFormFile Image
+        ) :IRequest<ErrorOr<Unit>>;
 }

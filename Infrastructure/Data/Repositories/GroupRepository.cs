@@ -13,30 +13,30 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class GroupRepository : Repository<GroupResponse>, IGroupRepository
+    public class GroupRepository : Repository<Group>, IGroupRepository
     {
         public GroupRepository(SqlConnectionFactory sqlConnection) : base(sqlConnection)
         {
         }
-        public override async Task<IEnumerable<GroupResponse>> GetAll(string storedProcedure)
+        public override async Task<IEnumerable<Group>> GetAll(string storedProcedure)
         {
             using var connection = _sqlConnection.CreateConnection();
-            return await connection.QueryAsync<GroupResponse>(storedProcedure);
+            return await connection.QueryAsync<Group>(storedProcedure);
         }
-        public override async Task<GroupResponse?> GetById(string storedProcedure, object param)
+        public override async Task<Group?> GetById(string storedProcedure, object param)
         {
             using var connection = _sqlConnection.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<GroupResponse>
+            return await connection.QueryFirstOrDefaultAsync<Group>
                 (
                     storedProcedure,
                     param
                 );
         }
 
-        public async Task<IEnumerable<GroupResponse>> GetByNames(string name)
+        public async Task<IEnumerable<Group>> GetByNames(string name)
         {
             using var connection = _sqlConnection.CreateConnection();
-            return await connection.QueryAsync<GroupResponse>
+            return await connection.QueryAsync<Group>
                 (
                     GroupProcedures.GetGroupsName,
                     new {name}
